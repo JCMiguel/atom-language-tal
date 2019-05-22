@@ -2,14 +2,14 @@
   "name": "language-tal",
   "version": "1.1.0",
   "description": "A TAL language grammar package",
-  "repository": "https://github.com/JCMiguel/language-tal",
+  "repository": "https://github.com/JCMiguel/atom-language-tal",
   "keywords": [
     "syntax",
     "highlighting",
     "grammar"
   ],
   "license": "MIT",
-  "bugs": "https://github.com/JCMiguel/language-tal/issues",
+  "bugs": "https://github.com/JCMiguel/atom-language-tal/issues",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   }
