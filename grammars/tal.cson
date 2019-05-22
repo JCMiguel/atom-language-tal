@@ -1,0 +1,97 @@
+# grammars/tal.cson
+# Tomé referencias del repo de C/C++
+#    https://github.com/atom/language-c/blob/master/grammars/c.cson
+#name: 'invalid.illegal.stray-comment-end.c'
+
+scopeName: 'source.tal'
+name: 'TAL'
+fileTypes: [ 'exp' ]
+limitLineLength: false
+patterns: [
+  {
+    ## COMENTARIO CON !
+    begin: '!'
+    end: '(!|$)'
+    name: 'comment.block.c'
+  }
+  {
+    ## COMENTARIO CON --
+    name: 'comment.line.example'
+    match: '--.*$'
+  }
+  {
+    ## STRING LITERAL ENTRE COMILLAS "hOLI"
+    match: '(\\")(.*?)(\\")'
+    captures:
+      1:
+        name: 'string.quoted.single'
+      2:
+        name: 'string.quoted.single'
+      3:
+        name: 'string.quoted.single'
+  }
+  {
+    ## OPERADORES VARIOS
+    name: 'markup.bold.example'#'keyword.operator'
+    match: "(:=|=:|':='|'=:'|<<|>>|'<<'|'>>'|\\+|-|\\/|\\*)"
+  }
+  {
+    ## TIPOS DE VARIABLES
+    name: 'support.storage.type'
+    # name: 'support.type.sys-types.c'
+    match: '(?i:\\b(string|int|unsigned|struct|fixed|real)\\b)'
+  }
+  {
+    ## KEYWORDS PROC, BEGIN Y END
+    name: 'keyword.control.directive'
+    match: '(?i:\\b(proc|begin|end)\\b)'
+  }
+  {
+    ## DIRECTIVA DE INCORPORACIÓN DE FUENTES
+    # name: 'keyword.control.directive'
+    # match: '(?i:\\?source)'
+    begin: '(?i:(\\?source\\s))'
+    end: '(\\s|$)'
+    name: 'keyword.control.directive'
+  }
+  {
+    ## DECLARACIÓN EXTENDIDA
+    name: 'keyword.control.directive'
+    match: '(?i:\\s(\\.ext))'
+  }
+  {
+    ## NUMEROS
+    name: 'keyword.control.directive'
+    match: '(\\d|-\\d)'
+  }
+  {
+    ## IDENTIFICADORES DE FUNCIONES
+    match: '\\b(\\w*)(\\()'
+    captures:
+      1:
+        name: 'support.storage.type'
+
+  }
+  # {
+  #   match: '(?i:\\?source)(.*?)(\\()'
+  #   captures:
+  #     0:
+  #       name: 'meta.bold.example'
+  #     1:
+  #       name: 'punctuation.definition.bold.example'
+  #     2:
+  #       name: 'markup.bold.example'
+  #     3:
+  #       name: 'punctuation.definition.bold.example'
+  # }
+  # {
+  #   ## ELEMENTOS ENTRE CORCHETES []
+  #   match: '(\\[)(.*?)(\\])'
+  #   captures:
+  #     1:
+  #       name: 'keyword.control.directive'#'punctuation.definition.begin.bracket.square.c'
+  #     2:
+  #       name: 'keyword.control.directive'#'punctuation.definition.end.bracket.square.c'
+  # }
+  # etc.
+]

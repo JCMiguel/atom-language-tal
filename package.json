@@ -1,0 +1,16 @@
+{
+  "name": "language-tal",
+  "version": "1.0.0",
+  "description": "A TAL language grammar package",
+  "repository": "https://github.com/JCMiguel/language-tal",
+  "keywords": [
+    "syntax",
+    "highlighting",
+    "grammar"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/JCMiguel/language-tal/issues",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  }
+}
