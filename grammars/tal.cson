@@ -1,22 +1,24 @@
 # grammars/tal.cson
-# Tomé referencias del repo de C/C++
-#    https://github.com/atom/language-c/blob/master/grammars/c.cson
-#name: 'invalid.illegal.stray-comment-end.c'
+#   Autor: JCMiguel
+#   Date: 05-2019
+#   References:
+#     https://github.com/atom/language-c/blob/master/grammars/c.cson
+#     https://macromates.com/manual/en/language_grammars
 
 scopeName: 'source.tal'
 name: 'TAL'
-fileTypes: [ 'exp' ]
+fileTypes: [ 'tal' ]
 limitLineLength: false
 patterns: [
   {
     ## COMENTARIO CON !
     begin: '!'
     end: '(!|$)'
-    name: 'comment.block.c'
+    name: 'comment.block'
   }
   {
     ## COMENTARIO CON --
-    name: 'comment.line.example'
+    name: 'comment.line'
     match: '--.*$'
   }
   {
@@ -24,74 +26,131 @@ patterns: [
     match: '(\\")(.*?)(\\")'
     captures:
       1:
-        name: 'string.quoted.single'
+        name: 'string.quoted.double'
       2:
-        name: 'string.quoted.single'
+        name: 'string.quoted.double'
       3:
-        name: 'string.quoted.single'
+        name: 'string.quoted.double'
   }
   {
     ## OPERADORES VARIOS
-    name: 'markup.bold.example'#'keyword.operator'
-    match: "(:=|=:|':='|'=:'|<<|>>|'<<'|'>>'|\\+|-|\\/|\\*)"
+    name: 'entity.name.type' #Uso esto sólo por el color
+    match: "(?i:(:=|=:|':='|'=:'|<<|>>|'<<'|'>>'|\\+|-|\\/|\\*|<|>|=|<=|>=|<>|'<'|'>'|'='|'<='|'>='|'<>'|\\slor\\s|\\sland\\s|\\snot\\s|\\sxor\\s|\\sor\\s|\\sand\\s))"
   }
   {
     ## TIPOS DE VARIABLES
-    name: 'support.storage.type'
-    # name: 'support.type.sys-types.c'
-    match: '(?i:\\b(string|int|unsigned|struct|fixed|real)\\b)'
+    name: 'support.type'
+    match: '(?i:\\b(string|int|unsigned|struct|fixed|real|literal|label|block|name)\\b)'
+  }
+  {
+    ## ESTA REGLA ESTÁ PARA EVITAR LA COLORACIÓN DE TEXTO^TIPOVARIABLE
+    name: 'support.other'
+    match: '(?i:\\^(string|int|unsigned|struct|fixed|real|literal|label|block|name)\\b)'
+  }
+  {
+    ## DIRECCIONAMIENTO E INDIRECCIONAMIENTO @PTR
+    name: 'entity.name.tag'
+    match: '(\\@((\\w*\\^\\w*\\^\\w*)|(\\w*\\^\\w*)|(\\w*)))'
   }
   {
     ## KEYWORDS PROC, BEGIN Y END
-    name: 'keyword.control.directive'
-    match: '(?i:\\b(proc|begin|end)\\b)'
+    name: 'support.function'
+    match: '(?i:\\b(proc|subproc|begin|end)\\b)'
   }
   {
-    ## DIRECTIVA DE INCORPORACIÓN DE FUENTES
-    # name: 'keyword.control.directive'
-    # match: '(?i:\\?source)'
-    begin: '(?i:(\\?source\\s))'
+    ## ATRIBUTOS DE PROC
+    name: 'entity.name.tag'
+    match: '(?i:\\b(main|variable|extensible|forward|external)\\b)'
+  }
+  {
+    ## USO DE REGISTROS DE OPTIMIZACIÓN
+    name: 'entity.name.tag'
+    match: '(?i:\\b(use|drop)\\b)'
+  }
+  {
+    ## SENTENCIAS DE CONTROL
+    name: 'keyword.control'
+    match: '(?i:\\b(if|then|while|for|else|case|otherwise|to|do|call|assert|bytes|words)\\b)'
+  }
+  {
+    ## DIRECTIVAS DE COMPILACION PARTE I
+    begin: '(?i:(\\?(source|section|list|nolist|nocode|block)(,|\\s|,\\s)))'
     end: '(\\s|$)'
-    name: 'keyword.control.directive'
+    name: 'entity.name.section'
+  }
+  {
+    ## DIRECTIVAS DE COMPILACION PARTE II
+    begin: '(?i:(\\?(page|map|assertion)))'
+    end: '$'
+    name: 'entity.name.section'
   }
   {
     ## DECLARACIÓN EXTENDIDA
-    name: 'keyword.control.directive'
+    name: 'keyword.control'
     match: '(?i:\\s(\\.ext))'
   }
   {
-    ## NUMEROS
-    name: 'keyword.control.directive'
-    match: '(\\d|-\\d)'
+    ## NUMEROS REAL (FLOTANTES)
+    name: 'constant.numeric'
+    match: '(?i:((\\d+\\.\\d+)|(\\d+))e(\\d+|.\\d+))'
+  }
+  {
+    ## NUMEROS INT(32)        #BINARIO
+    name: 'entity.name.section' #Uso esto sólo por el color
+    match: '(?i:(\\%b)[0-1]+d)'
+  }
+  {
+    ## NUMEROS INT(16)        #BINARIO
+    name: 'constant.numeric'
+    match: '(?i:(\\%b)[0-1]+)'
+  }
+  {
+    ## NUMEROS INT(32)        #HEXADECIMAL
+    name: 'entity.name.section' #Uso esto sólo por el color
+    match: '(?i:(\\%h)[0-9a-fA-F]+\\%d)'
+  }
+  {
+    ## NUMEROS INT(16)        #HEXADECIMAL
+    name: 'constant.numeric'
+    match: '(?i:(\\%h)[0-9a-fA-F]+)'
+  }
+  {
+    ## NUMEROS INT(32)         #OCTAL
+    name: 'entity.name.section' #Uso esto sólo por el color
+    match: '(?i:(\\%)[0-7]+d)'
+  }
+  {
+    ## NUMEROS INT(16)         #OCTAL
+    name: 'constant.numeric'
+    match: '(?i:(\\%)[0-7]+)'
+  }
+  {
+    ## NUMEROS FIXED
+    name: 'constant.numeric'
+    match: '(?i:(\\d+f)|(\\d+\\.\\d+f))'
+  }
+  {
+    ## NUMEROS INT(32)        #DECIMAL
+    name: 'entity.name.tag' #Uso esto sólo por el color
+    match: '(?i:\\b\\d+d)'
+  }
+  {
+    ## NUMEROS INT(16)        #DECIMAL
+    name: 'keyword.control' #Uso esto sólo por el color
+    match: '(\\b\\d+)'
   }
   {
     ## IDENTIFICADORES DE FUNCIONES
-    match: '\\b(\\w*)(\\()'
+    match: '((\\w*)|(\\w*\\^\\w*)|(\\w*\\^\\w*\\^\\w*))(\\(|\\s\\()'
     captures:
       1:
-        name: 'support.storage.type'
-
+        name: 'string.quoted.double' #Uso esto sólo por el color
   }
-  # {
-  #   match: '(?i:\\?source)(.*?)(\\()'
-  #   captures:
-  #     0:
-  #       name: 'meta.bold.example'
-  #     1:
-  #       name: 'punctuation.definition.bold.example'
-  #     2:
-  #       name: 'markup.bold.example'
-  #     3:
-  #       name: 'punctuation.definition.bold.example'
-  # }
-  # {
-  #   ## ELEMENTOS ENTRE CORCHETES []
-  #   match: '(\\[)(.*?)(\\])'
-  #   captures:
-  #     1:
-  #       name: 'keyword.control.directive'#'punctuation.definition.begin.bracket.square.c'
-  #     2:
-  #       name: 'keyword.control.directive'#'punctuation.definition.end.bracket.square.c'
-  # }
-  # etc.
+  {
+    ## FUNCIONES ESTANDAR
+    match: '(\\$\\w*)(\\(|\\s)'
+    captures:
+      1:
+        name: 'support.function'
+  }
 ]
